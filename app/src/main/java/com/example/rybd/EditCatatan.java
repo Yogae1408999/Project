@@ -2,6 +2,8 @@ package com.example.rybd;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -31,14 +34,18 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AddcatatanActivity extends AppCompatActivity {
+public class EditCatatan extends AppCompatActivity {
     private static final String TAG = "";
+    Bundle data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addcatatan);
+        Intent intentc= getIntent();
+        data = intentc.getExtras();
         EditText isianJudul = findViewById(R.id.judul);
         EditText isianIsi = findViewById(R.id.isi);
         EditText isitanggal = findViewById(R.id.tanggal);
@@ -48,7 +55,27 @@ public class AddcatatanActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myref = database.getReference("catatan");
         DatabaseReference myrefuser = database.getReference("user");
+        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
+        String mUser = sharedPreferences.getString("username","");
+        String mEmail = sharedPreferences.getString("email","");
         Calendar calendar = Calendar.getInstance();
+        isianIsi.setText(data.get("data").toString());
+        myref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (mUser.equals(snapshot.child(mUser).getKey())){
+                    isianJudul.setText(snapshot.child(mUser).child(data.get("data").toString()).child("judul").getValue(String.class));
+                    isianIsi.setText(snapshot.child(mUser).child(data.get("data").toString()).child("isian").getValue(String.class));
+                    isitanggal.setText(snapshot.child(mUser).child(data.get("data").toString()).child("tanggal").getValue(String.class));
+                    isijam.setText(snapshot.child(mUser).child(data.get("data").toString()).child("jam").getValue(String.class));
+                    isiremainder.setText(snapshot.child(mUser).child(data.get("data").toString()).child("remainder").getValue(String.class));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -62,14 +89,14 @@ public class AddcatatanActivity extends AppCompatActivity {
         };
 
         isitanggal.setOnClickListener(view -> {
-            new DatePickerDialog(AddcatatanActivity.this, date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            new DatePickerDialog(EditCatatan.this, date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
         });
         isijam.setOnClickListener(view -> {
             Calendar mcurrentTime = Calendar.getInstance();
             int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
             int minute = mcurrentTime.get(Calendar.MINUTE);
             TimePickerDialog mTimePicker;
-            mTimePicker = new TimePickerDialog(AddcatatanActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            mTimePicker = new TimePickerDialog(EditCatatan.this, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                     calendar.set(Calendar.HOUR_OF_DAY,selectedHour);
@@ -84,7 +111,7 @@ public class AddcatatanActivity extends AppCompatActivity {
         });
         isiremainder.setOnClickListener(view -> {
             String[] listitem = new String[]{"Tidak ada","5 Menit","10 Menit","30 Menit","1 jam","2 jam","3 jam"};
-            AlertDialog.Builder mBuil = new AlertDialog.Builder(AddcatatanActivity.this);
+            AlertDialog.Builder mBuil = new AlertDialog.Builder(EditCatatan.this);
             mBuil.setTitle("Silahkan pilih remainder");
             mBuil.setSingleChoiceItems(listitem, -1, new DialogInterface.OnClickListener() {
                 @Override
@@ -111,9 +138,7 @@ public class AddcatatanActivity extends AppCompatActivity {
             String remainder = isiremainder.getText().toString();
 //            FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //            FirebaseUser mUser = mAuth.getCurrentUser();
-            SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
-            String mEmail = sharedPreferences.getString("username","");
-            String nama = mEmail;
+            String nama = mUser;
 
             if(mEmail == ""){
                 Toast.makeText(this, "Silahkan Login", Toast.LENGTH_LONG).show();
@@ -124,20 +149,16 @@ public class AddcatatanActivity extends AppCompatActivity {
                 myref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        if (mEmail.equals(snapshot.child(mEmail).getKey())){
-                            Integer Jumlah = 0;
-                            for (DataSnapshot data : snapshot.child(mEmail).getChildren()){
-                                Jumlah = data.child("id").getValue(Integer.class)+1;
-                            }
+                        if (mUser.equals(snapshot.child(mUser).getKey())){
+                            Integer Jumlah = Integer.parseInt(String.valueOf(data.get("data")));
                             CatatanHelper catatanHelper = new CatatanHelper(Jumlah,judul,isi,tanggal,jam,remainder);
                             myref.child(nama).child(Jumlah.toString()).setValue(catatanHelper);
-                            Toast.makeText(AddcatatanActivity.this,"berhasil menmbahkan",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditCatatan.this,"berhasil menmbahkan",Toast.LENGTH_SHORT).show();
                             finish();
-                            Intent intent = new Intent(AddcatatanActivity.this, MainActivity.class);
+                            Intent intent = new Intent(EditCatatan.this, MainActivity.class);
                             startActivity(intent);
                         }
                     }
-
                     @Override
                     public void onCancelled( DatabaseError error) {
 
@@ -183,7 +204,7 @@ public class AddcatatanActivity extends AppCompatActivity {
                 startActivity(intent2);
                 return true;
             case R.id.logout:
-                SharedPreferences preferences = getSharedPreferences("Login",AddcatatanActivity.this.MODE_PRIVATE);
+                SharedPreferences preferences = getSharedPreferences("Login",EditCatatan.this.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
                 editor.apply();

@@ -15,23 +15,47 @@
     <EditText
         android:id="@+id/isi"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/judul"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="isi" />
+        android:hint="isi"
+        android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/set"
-        android:text="set remander"
+    <EditText
+        android:id="@+id/tanggal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/isi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="1999/12/30" />
 
+    <EditText
+        android:id="@+id/jam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tanggal"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="23:59" />
+    <EditText
+        android:id="@+id/remainder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/jam"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="Remainder" />
     <Button
         android:id="@+id/simpan"
         android:text="Simpan"
-        android:layout_below="@+id/set"
+        android:layout_below="@+id/remainder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
