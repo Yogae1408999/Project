@@ -2,7 +2,13 @@ package com.example.rybd;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +27,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rybd.databinding.ActivityMainBinding;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -37,6 +46,12 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements CatatanViewClick{
+    ActionBarDrawerToggle toogleMenu;
+    DrawerLayout drawerLayout;
+
+    private AppBarConfiguration mAppBarConfiguration;
+    private ActivityMainBinding binding;
+
     private RecyclerView recyclerView;
     private AdapterCatatan adapter;
     public ArrayList<CatatanHelper> catatanArrayList;
@@ -45,9 +60,30 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        FloatingActionButton addCatatans = findViewById(R.id.floatingActionButton);
+
+//        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.appBarMain.toolbar);
+
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_gallery)
+                .setOpenableLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+//        FloatingActionButton addCatatans = findViewById(R.id.floatingActionButton);
         SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        toogleMenu = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
         TextView textEmail = findViewById(R.id.email);
 //        FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -56,11 +92,14 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
         String mEmail = sharedPreferences.getString("email","");
         catatanArrayList = new ArrayList<>();
 
-        if(mEmail == ""){
-            textEmail.setText("Belum Login");
-        }else{
-            textEmail.setText(mEmail);
-        }
+//        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+//        toolbar.setOnMenuItemClickListener(menu);
+
+//        if(mEmail == ""){
+//            textEmail.setText("Belum Login");
+//        }else{
+//            textEmail.setText(mEmail);
+//        }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myref = database.getReference("catatan");
         myref.addValueEventListener(new ValueEventListener() {
@@ -87,12 +126,16 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
             }
         });
 
-        addCatatans.setOnClickListener(view -> {
-            finish();
-            Intent intent = new Intent(this, AddcatatanActivity.class);
-            startActivity(intent);
-        });
+
+//        addCatatans.setOnClickListener(view -> {
+//            finish();
+//            Intent intent = new Intent(this, AddcatatanActivity.class);
+//            startActivity(intent);
+//        });
     }
+
+
+
 
 
     @Override
@@ -173,5 +216,12 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
             }
         });
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 }
