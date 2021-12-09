@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "558257753379",
+    "project_id": "rybd-eae46",
+    "firebase_url": "https://rybd-eae46-default-rtdb.firebaseio.com/",
+    "storage_bucket": "rybd-eae46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558257753379:android:f3316a6ed78369576c5096",
+        "android_client_info": {
+          "package_name": "com.example.rybd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558257753379-gecup5u8h8t3r0m93fniufkb56b58c7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7gr32xI_CzC5f-mJee9fF55IzBcQybm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558257753379-gecup5u8h8t3r0m93fniufkb56b58c7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
