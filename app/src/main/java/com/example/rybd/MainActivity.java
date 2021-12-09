@@ -5,6 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rybd.databinding.ActivityMainBinding;
+import com.example.rybd.ui.catatan.CatatanFragment;
+import com.example.rybd.ui.gallery.GalleryFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -70,27 +75,33 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-
+        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
+        String mEmail = sharedPreferences.getString("username","");
+        if(mEmail == ""){
+            navigationView.inflateMenu(R.menu.nav_header_menu);
+        }else{
+            navigationView.inflateMenu(R.menu.nav_header_menu_2);
+        }
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery)
+                R.id.menu_satu,R.id.menu_dua, R.id.menu_tiga,R.id.menu_logout)
                 .setOpenableLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
 //        FloatingActionButton addCatatans = findViewById(R.id.floatingActionButton);
-        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         toogleMenu = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
-        TextView textEmail = findViewById(R.id.email);
+//        TextView textEmail = findViewById(R.id.email);
 //        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //        FirebaseUser mUser = mAuth.getCurrentUser();
-        String mUser = sharedPreferences.getString("username","");
-        String mEmail = sharedPreferences.getString("email","");
-        catatanArrayList = new ArrayList<>();
+//        String mUser = sharedPreferences.getString("username","");
+//        String mEmail = sharedPreferences.getString("email","");
+//        catatanArrayList = new ArrayList<>();
 
 //        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
 //        toolbar.setOnMenuItemClickListener(menu);
@@ -100,38 +111,32 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
 //        }else{
 //            textEmail.setText(mEmail);
 //        }
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myref = database.getReference("catatan");
-        myref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                catatanArrayList.clear();
-                if (mUser.equals(snapshot.child(mUser).getKey())){
-                    for (DataSnapshot data : snapshot.child(mUser).getChildren()){
-                        catatanArrayList.add(new CatatanHelper(data.child("id").getValue(Integer.class),data.child("judul").getValue(String.class), data.child("isian").getValue(String.class),data.child("tanggal").getValue(String.class),data.child("jam").getValue(String.class),data.child("remainder").getValue(String.class)));
-                    }
-                }
-                Collections.reverse(catatanArrayList);
-
-                adapter = new AdapterCatatan(catatanArrayList,MainActivity.this);
-                recyclerView = (RecyclerView) findViewById(R.id.listCatatan);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-
-            }
-        });
-
-
-//        addCatatans.setOnClickListener(view -> {
-//            finish();
-//            Intent intent = new Intent(this, AddcatatanActivity.class);
-//            startActivity(intent);
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myref = database.getReference("catatan");
+//        myref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                catatanArrayList.clear();
+//                if (mUser.equals(snapshot.child(mUser).getKey())){
+//                    for (DataSnapshot data : snapshot.child(mUser).getChildren()){
+//                        catatanArrayList.add(new CatatanHelper(data.child("id").getValue(Integer.class),data.child("judul").getValue(String.class), data.child("isian").getValue(String.class),data.child("tanggal").getValue(String.class),data.child("jam").getValue(String.class),data.child("remainder").getValue(String.class)));
+//                    }
+//                }
+//                Collections.reverse(catatanArrayList);
+//
+//                adapter = new AdapterCatatan(catatanArrayList,MainActivity.this);
+//                recyclerView = (RecyclerView) findViewById(R.id.listCatatan);
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+//                recyclerView.setLayoutManager(layoutManager);
+//                recyclerView.setAdapter(adapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//
+//            }
 //        });
+
     }
 
 
@@ -208,6 +213,12 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
                 Toast.makeText(MainActivity.this, "Berhasil Hapus : "+catatanArrayList.get(position).getJudul(),Toast.LENGTH_SHORT).show();
                 catatanArrayList.remove(position);
                 adapter.notifyItemRemoved(position);
+                adapter = new AdapterCatatan(catatanArrayList,MainActivity.this);
+                recyclerView = (RecyclerView) findViewById(R.id.listCatatan);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setAdapter(adapter);
+
             }
 
             @Override
@@ -224,4 +235,5 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }

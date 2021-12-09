@@ -3,13 +3,21 @@ package com.example.rybd;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,8 +38,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class AddcatatanActivity extends AppCompatActivity {
     private static final String TAG = "";
@@ -124,7 +135,17 @@ public class AddcatatanActivity extends AppCompatActivity {
                 myref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        if (mEmail.equals(snapshot.child(mEmail).getKey())){
+                        if (judul.length() == 0) {
+                            isianJudul.setError("Tidak boleh kosong");
+                        }else if(isi.length() == 0){
+                            isianIsi.setError("Tidak boleh kosong");
+                        }else if(tanggal.length() == 0){
+                            isitanggal.setError("Tidak boleh kosong");
+                        }else if(jam.length() == 0){
+                            isijam.setError("Tidak boleh kosong");
+                        }else if(remainder.length() == 0){
+                            isiremainder.setError("Tidak boleh kosong");
+                        }else if (mEmail.equals(snapshot.child(mEmail).getKey())){
                             Integer Jumlah = 0;
                             for (DataSnapshot data : snapshot.child(mEmail).getChildren()){
                                 Jumlah = data.child("id").getValue(Integer.class)+1;
@@ -132,9 +153,43 @@ public class AddcatatanActivity extends AppCompatActivity {
                             CatatanHelper catatanHelper = new CatatanHelper(Jumlah,judul,isi,tanggal,jam,remainder);
                             myref.child(nama).child(Jumlah.toString()).setValue(catatanHelper);
                             Toast.makeText(AddcatatanActivity.this,"berhasil menmbahkan",Toast.LENGTH_SHORT).show();
+                            Calendar date = Calendar.getInstance();
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                            try {
+                                date.setTime(format.parse(tanggal+jam));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+//                            Calendar cal = new GregorianCalendar();
+//                            cal.add(Calendar.DAY_OF_YEAR, date.YEAR);
+//                            cal.set(Calendar.HOUR_OF_DAY, date.HOUR_OF_DAY);
+//                            cal.set(Calendar.MINUTE, date.MINUTE);
+//                            cal.set(Calendar.SECOND, date.SECOND);
+//                            cal.set(Calendar.MILLISECOND, date.MILLISECOND);
+//                            cal.set(Calendar.DATE, date.DATE);
+//                            cal.set(Calendar.MONTH, date.MONTH);
                             finish();
                             Intent intent = new Intent(AddcatatanActivity.this, MainActivity.class);
                             startActivity(intent);
+//                            Intent intentx = new Intent(AddcatatanActivity.this, MyBroadcastReceiver.class);
+//                            PendingIntent pendingIntent = PendingIntent.getBroadcast(AddcatatanActivity.this, 234324243, intent, 0);
+//                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
+//                                    + (5 * 1000), pendingIntent);
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                CharSequence name = "remander";
+                                String desc = "Chanelku";
+                                Integer importx = NotificationManager.IMPORTANCE_HIGH;
+                                NotificationChannel channel = new NotificationChannel("alarm",name,importx);
+                                channel.setDescription(desc);
+
+                                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                                notificationManager.createNotificationChannel(channel);
+                            }
+                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            Intent intent1 = new Intent(AddcatatanActivity.this,MyBroadcastReceiver.class);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(AddcatatanActivity.this,0,intent1,0);
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (5 * 1000), pendingIntent);
                         }
                     }
 

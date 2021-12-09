@@ -5,11 +5,8 @@
         android:title="Home" />
 
     <item
-        android:id="@+id/menu_dua"
-        android:title="Login" />
+        android:id="@+id/menu_logout"
+        android:title="Logout" />
 
-    <item
-        android:id="@+id/menu_tiga"
-        android:title="Register" />
 
 </menu>

@@ -34,50 +34,50 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
-        EditText inputEmail = findViewById(R.id.email);
-        EditText inputPassword = findViewById(R.id.password);
-        Button btnLogin = findViewById(R.id.btnlogin);
-        Button btnRegister = findViewById(R.id.btnregister);
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+//        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
+//        EditText inputEmail = findViewById(R.id.email);
+//        EditText inputPassword = findViewById(R.id.password);
+//        Button btnLogin = findViewById(R.id.btnlogin);
+//        Button btnRegister = findViewById(R.id.btnregister);
+//        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 //        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //        FirebaseUser mUser = mAuth.getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myref = database.getReference("user");
-        btnLogin.setOnClickListener(v -> {
-            String username = inputEmail.getText().toString();
-            String password = inputPassword.getText().toString();
-            Query query = myref.orderByChild("nama").equalTo(username);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                  if (snapshot.exists()){
-                      for (DataSnapshot user : snapshot.getChildren()) {
-                          String getPassword = user.child("password").getValue(String.class);
-                          String getEmail = user.child("email").getValue(String.class);
-
-                          if (password.equals(getPassword)) {
-                              SharedPreferences.Editor editor = sharedPreferences.edit();
-                              editor.putString("username",username);
-                              editor.putString("email",getEmail);
-                              editor.apply();
-                              finish();
-                              Intent intent2 = new Intent(LoginActivity.this, MainActivity.class);
-                              startActivity(intent2);
-                              Toast.makeText(LoginActivity.this, "Berhasil Login", Toast.LENGTH_LONG).show();
-                          } else {
-                              Toast.makeText(LoginActivity.this, "Password salah", Toast.LENGTH_LONG).show();
-                          }
-                      }
-                  }else{
-                      Toast.makeText(LoginActivity.this, "Username tidak ditemukan", Toast.LENGTH_LONG).show();
-                  }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myref = database.getReference("user");
+//        btnLogin.setOnClickListener(v -> {
+//            String username = inputEmail.getText().toString();
+//            String password = inputPassword.getText().toString();
+//            Query query = myref.orderByChild("nama").equalTo(username);
+//            query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                  if (snapshot.exists()){
+//                      for (DataSnapshot user : snapshot.getChildren()) {
+//                          String getPassword = user.child("password").getValue(String.class);
+//                          String getEmail = user.child("email").getValue(String.class);
+//
+//                          if (password.equals(getPassword)) {
+//                              SharedPreferences.Editor editor = sharedPreferences.edit();
+//                              editor.putString("username",username);
+//                              editor.putString("email",getEmail);
+//                              editor.apply();
+//                              finish();
+//                              Intent intent2 = new Intent(LoginActivity.this, MainActivity.class);
+//                              startActivity(intent2);
+//                              Toast.makeText(LoginActivity.this, "Berhasil Login", Toast.LENGTH_LONG).show();
+//                          } else {
+//                              Toast.makeText(LoginActivity.this, "Password salah", Toast.LENGTH_LONG).show();
+//                          }
+//                      }
+//                  }else{
+//                      Toast.makeText(LoginActivity.this, "Username tidak ditemukan", Toast.LENGTH_LONG).show();
+//                  }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//                }
+//            });
 //            if(!email.matches(emailPattern)){
 //                inputEmail.setError("Gunakan Email Asli");
 //            }else if(password.isEmpty() || password.length() < 6){
@@ -99,13 +99,13 @@ public class LoginActivity extends AppCompatActivity {
 //                    }
 //                });
 //            }
-        });
-
-        btnRegister.setOnClickListener(v -> {
-            finish();
-            Intent intent = new Intent(this, RegisterActivity.class);
-            startActivity(intent);
-        });
+//        });
+//
+//        btnRegister.setOnClickListener(v -> {
+//            finish();
+//            Intent intent = new Intent(this, RegisterActivity.class);
+//            startActivity(intent);
+//        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

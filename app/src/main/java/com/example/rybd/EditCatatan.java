@@ -149,7 +149,17 @@ public class EditCatatan extends AppCompatActivity {
                 myref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        if (mUser.equals(snapshot.child(mUser).getKey())){
+                        if (judul.length() == 0) {
+                            isianJudul.setError("Tidak boleh kosong");
+                        }else if(isi.length() == 0){
+                            isianIsi.setError("Tidak boleh kosong");
+                        }else if(tanggal.length() == 0){
+                            isitanggal.setError("Tidak boleh kosong");
+                        }else if(jam.length() == 0){
+                            isijam.setError("Tidak boleh kosong");
+                        }else if(remainder.length() == 0) {
+                            isiremainder.setError("Tidak boleh kosong");
+                        }else if (mUser.equals(snapshot.child(mUser).getKey())){
                             Integer Jumlah = Integer.parseInt(String.valueOf(data.get("data")));
                             CatatanHelper catatanHelper = new CatatanHelper(Jumlah,judul,isi,tanggal,jam,remainder);
                             myref.child(nama).child(Jumlah.toString()).setValue(catatanHelper);

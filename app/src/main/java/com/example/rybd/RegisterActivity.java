@@ -38,64 +38,60 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        EditText inputNama = findViewById(R.id.nama);
-        EditText inputEmail = findViewById(R.id.email);
-        EditText inputPassword = findViewById(R.id.password);
-        EditText inputConfrimpassword = findViewById(R.id.confirmpassword);
-        Button btnRegister = findViewById(R.id.btnregister);
-        Button btnLogin = findViewById(R.id.btnlogin);
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-        String namaPattern = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]$";
-        Pattern pattern = Pattern.compile(namaPattern);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myref = database.getReference("user");
+//        EditText inputNama = findViewById(R.id.nama);
+//        EditText inputEmail = findViewById(R.id.email);
+//        EditText inputPassword = findViewById(R.id.password);
+//        EditText inputConfrimpassword = findViewById(R.id.confirmpassword);
+//        Button btnRegister = findViewById(R.id.btnregister);
+//        Button btnLogin = findViewById(R.id.btnlogin);
+//        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+//        String namaPattern = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]$";
+//        Pattern pattern = Pattern.compile(namaPattern);
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myref = database.getReference("user");
 
 //        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //        FirebaseUser mUser = mAuth.getCurrentUser();
-        btnRegister.setOnClickListener(view -> {
-            String nama = inputNama.getText().toString();
-            String email = inputEmail.getText().toString();
-            String password = inputPassword.getText().toString();
-            String confrimpassword = inputConfrimpassword.getText().toString();
-
-            RegisterHelper registerHelper = new RegisterHelper(email, password, nama);
-            myref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    for (DataSnapshot data: snapshot.getChildren()) {
-                        String getEmail = data.child("email").getValue(String.class);
-                        if (email.equals(getEmail)){
-                            inputEmail.setError("Sudah Digunakan");
-                        }else if (pattern.matcher(nama).matches() == false){
-                            inputNama.setError("username tidak boleh spasi");
-                        }else if(snapshot.hasChild(nama)){
-                            inputNama.setError("username sudah ada");
-                        }else if(!email.matches(emailPattern)){
-                            inputEmail.setError("Gunakan Email Asli");
-                        }else if(password.isEmpty() || password.length() < 6){
-                            inputPassword.setError("password kurang dari 6");
-                        }else if(!password.equals(confrimpassword)){
-                            inputConfrimpassword.setError("password tidak cocok");
-                        }else if(!email.equals(getEmail) && pattern.matcher(nama).matches() && !snapshot.hasChild(nama) && email.matches(emailPattern) && !(password.isEmpty() || password.length() < 6) && password.equals(confrimpassword)){
-//                        Date c = Calendar.getInstance().getTime();
-//                        System.out.println("Current time => " + c);
-//                        SimpleDateFormat df = new SimpleDateFormat("HHmmssZddMMMyyyy", Locale.getDefault());
-//                        String formattedDate = df.format(c);
-                            finish();
-                            Intent intent2 = new Intent(RegisterActivity.this, MainActivity.class);
-                            startActivity(intent2);
-                            Toast.makeText(RegisterActivity.this, "Berhasil Mendaftar",Toast.LENGTH_SHORT).show();
-                            myref.child(nama).setValue(registerHelper);
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-
-                }
-            });
+//        btnRegister.setOnClickListener(view -> {
+//            String nama = inputNama.getText().toString();
+//            String email = inputEmail.getText().toString();
+//            String password = inputPassword.getText().toString();
+//            String confrimpassword = inputConfrimpassword.getText().toString();
+//
+//            RegisterHelper registerHelper = new RegisterHelper(email, password, nama);
+//            myref.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot snapshot) {
+//                    for (DataSnapshot data: snapshot.getChildren()) {
+//                        String getEmail = data.child("email").getValue(String.class);
+//                        if (email.equals(getEmail)){
+//                            inputEmail.setError("Sudah Digunakan");
+//                        }else if (pattern.matcher(nama).matches() == false){
+//                            inputNama.setError("username tidak boleh spasi");
+//                        }else if(snapshot.hasChild(nama)){
+//                            inputNama.setError("username sudah ada");
+//                        }else if(!email.matches(emailPattern)){
+//                            inputEmail.setError("Gunakan Email Asli");
+//                        }else if(password.isEmpty() || password.length() < 6){
+//                            inputPassword.setError("password kurang dari 6");
+//                        }else if(!password.equals(confrimpassword)){
+//                            inputConfrimpassword.setError("password tidak cocok");
+//                        }else if(!email.equals(getEmail) && pattern.matcher(nama).matches() && !snapshot.hasChild(nama) && email.matches(emailPattern) && !(password.isEmpty() || password.length() < 6) && password.equals(confrimpassword)){
+//                            finish();
+//                            Intent intent2 = new Intent(RegisterActivity.this, MainActivity.class);
+//                            startActivity(intent2);
+//                            Toast.makeText(RegisterActivity.this, "Berhasil Mendaftar",Toast.LENGTH_SHORT).show();
+//                            myref.child(nama).setValue(registerHelper);
+//                        }
+//                    }
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError error) {
+//
+//                }
+//            });
 //            if(nama.isEmpty()){
 //                inputNama.setError("Nama Kosong");
 //            }else if(!email.matches(emailPattern)){
@@ -127,12 +123,12 @@ public class RegisterActivity extends AppCompatActivity {
 //                });
 //            }
 
-        });
-        btnLogin.setOnClickListener(v -> {
-            finish();
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        });
+//        });
+//        btnLogin.setOnClickListener(v -> {
+//            finish();
+//            Intent intent = new Intent(this, LoginActivity.class);
+//            startActivity(intent);
+//        });
 
     }
     @Override

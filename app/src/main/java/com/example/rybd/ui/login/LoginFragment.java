@@ -1,4 +1,4 @@
-package com.example.rybd.ui.gallery;
+package com.example.rybd.ui.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,23 +31,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class GalleryFragment extends Fragment {
-
-//    private GalleryViewModel galleryViewModel;
+public class LoginFragment extends Fragment {
     private View binding;
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
 
         binding = inflater.inflate(R.layout.activity_login, container, false);
-
-//        final TextView textView = binding.textGallery;
-//        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
         SharedPreferences sharedPreferences = binding.getContext().getSharedPreferences("Login",getContext().MODE_PRIVATE);
         EditText inputEmail = binding.findViewById(R.id.email);
         EditText inputPassword = binding.findViewById(R.id.password);
@@ -72,10 +60,9 @@ public class GalleryFragment extends Fragment {
                                 editor.putString("username",username);
                                 editor.putString("email",getEmail);
                                 editor.apply();
-                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                transaction.replace(R.id.nav_host_fragment_content_main, new HomeFragment());
-                                transaction.addToBackStack(null);
-                                transaction.commit();
+                                Intent intent2 = new Intent(getContext(), MainActivity.class);
+                                startActivity(intent2);
+                                getActivity().finish();
                                 Toast.makeText(getContext(), "Berhasil Login", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(getContext(), "Password salah", Toast.LENGTH_LONG).show();

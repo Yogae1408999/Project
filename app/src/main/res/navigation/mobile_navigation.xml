@@ -3,18 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/menu_satu">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/menu_satu"
         android:name="com.example.rybd.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.rybd.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/menu_dua"
+        android:name="com.example.rybd.ui.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/activity_login" />
+
+    <fragment
+        android:id="@+id/menu_tiga"
+        android:name="com.example.rybd.ui.register.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/activity_register" />
+
+    <fragment
+        android:id="@+id/menu_logout"
+        android:name="com.example.rybd.LogoutFragment"
+        android:label="Logout"
+        tools:layout="@layout/activity_register" />
+
+    <fragment
+        android:id="@+id/menu_catatan"
+        android:name="com.example.rybd.ui.catatan.CatatanFragment"
+        android:label="Catatan"
+        tools:layout="@layout/activity_addcatatan" />
 
 </navigation>
