@@ -11,7 +11,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="open">"Open"</string>
     <string name="close">"Close"</string>
-    <string name="header_title">"Header Nama"</string>
+    <string name="header_title">"Belum Login"</string>
     <string name="header_text">"Sub Menu nama"</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>

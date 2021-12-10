@@ -66,11 +66,11 @@
         android:layout_below="@+id/confirmpassword"
         android:layout_marginTop="30dp"
         android:text="Register" />
-    <Button
-        android:id="@+id/btnlogin"
-        android:layout_width="300dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/btnregister"
-        android:layout_height="wrap_content"
-        android:text="Login"/>
+<!--    <Button-->
+<!--        android:id="@+id/btnlogin"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_below="@+id/btnregister"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Login"/>-->
 </RelativeLayout>

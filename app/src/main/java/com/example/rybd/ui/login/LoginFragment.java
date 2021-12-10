@@ -24,6 +24,7 @@ import com.example.rybd.R;
 import com.example.rybd.RegisterActivity;
 import com.example.rybd.databinding.FragmentGalleryBinding;
 import com.example.rybd.ui.home.HomeFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,8 +26,10 @@ import com.example.rybd.CatatanViewClick;
 import com.example.rybd.EditCatatan;
 import com.example.rybd.MainActivity;
 import com.example.rybd.R;
+import com.example.rybd.databinding.ActivityMainBinding;
 import com.example.rybd.databinding.FragmentHomeBinding;
 import com.example.rybd.ui.catatan.CatatanFragment;
+import com.example.rybd.ui.login.LoginFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class HomeFragment extends Fragment implements CatatanViewClick, View.OnClickListener {
+public class HomeFragment extends Fragment implements CatatanViewClick {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
@@ -48,16 +51,17 @@ public class HomeFragment extends Fragment implements CatatanViewClick, View.OnC
     ArrayList<String> data;
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-//        final TextView textView = binding.textHome;
+
+        //        final TextView textView = binding.textHome;
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override
 //            public void onChanged(@Nullable String s) {
 //                textView.setText(s);
 //            }
 //        });
+
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
         TextView textEmail = this.getActivity().findViewById(R.id.email);
         String mUser = sharedPreferences.getString("username","");
@@ -88,14 +92,7 @@ public class HomeFragment extends Fragment implements CatatanViewClick, View.OnC
 
             }
         });
-        FloatingActionButton ftb = getActivity().findViewById(R.id.fab);
-//        ftb.setOnClickListener(view -> {
-//            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//            ft.replace(R.id.nav_host_fragment_content_main, new CatatanFragment());
-//            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//            ft.addToBackStack(null);
-//            ft.commit();
-//        });
+
         return root;
     }
 
@@ -141,12 +138,4 @@ public class HomeFragment extends Fragment implements CatatanViewClick, View.OnC
         });
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.fab:
-                Toast.makeText(getContext(),"asdasd",Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
 }

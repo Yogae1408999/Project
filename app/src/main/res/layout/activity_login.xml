@@ -46,11 +46,11 @@
         android:layout_marginTop="30dp"
         android:layout_height="wrap_content"
         android:text="Login"/>
-    <Button
-        android:id="@+id/btnregister"
-        android:layout_width="300dp"
-        android:layout_below="@+id/btnlogin"
-        android:layout_marginTop="10dp"
-        android:layout_height="wrap_content"
-        android:text="Register"/>
+<!--    <Button-->
+<!--        android:id="@+id/btnregister"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_below="@+id/btnlogin"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Register"/>-->
 </RelativeLayout>

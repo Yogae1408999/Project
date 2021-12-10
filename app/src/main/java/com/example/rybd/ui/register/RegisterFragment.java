@@ -20,6 +20,7 @@ import com.example.rybd.RegisterActivity;
 import com.example.rybd.RegisterHelper;
 import com.example.rybd.ui.gallery.GalleryFragment;
 import com.example.rybd.ui.home.HomeFragment;
+import com.example.rybd.ui.login.LoginFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,7 +72,7 @@ public class RegisterFragment extends Fragment {
                             inputConfrimpassword.setError("password tidak cocok");
                         }else if(!email.equals(getEmail) && pattern.matcher(nama).matches() && !snapshot.hasChild(nama) && email.matches(emailPattern) && !(password.isEmpty() || password.length() < 6) && password.equals(confrimpassword)){
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.nav_host_fragment_content_main, new GalleryFragment());
+                            transaction.replace(R.id.nav_host_fragment_content_main, new LoginFragment());
                             transaction.addToBackStack(null);
                             transaction.commit();
                             Toast.makeText(getContext(), "Berhasil Mendaftar",Toast.LENGTH_SHORT).show();

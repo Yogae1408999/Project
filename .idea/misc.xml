@@ -21,10 +21,21 @@
         <entry key="..\:/D/KULIAH/PPB/Project/app/src/main/res/menu/optionmenu.xml" value="0.1" />
         <entry key="..\:/D/KULIAH/PPB/Project/app/src/main/res/menu/optionmenu2.xml" value="0.1" />
         <entry key="..\:/D/KULIAH/PPB/Project/app/src/main/res/menu/top_app_bar.xml" value="0.20416666666666666" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/layout/activity_login.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/layout/activity_register.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/layout/app_bar_main.xml" value="0.1" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/layout/list_item.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/layout/nav_header.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/layout/nav_header_main.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/layout/toolbar_head.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/menu/nav_header_menu.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/menu/nav_header_menu_2.xml" value="0.2" />
+        <entry key="..\:/Kuliah/PPB/Project/app/src/main/res/menu/top_app_bar.xml" value="0.2" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -129,7 +129,7 @@ public class AddcatatanActivity extends AppCompatActivity {
             if(mEmail == ""){
                 Toast.makeText(this, "Silahkan Login", Toast.LENGTH_LONG).show();
                 finish();
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             }else{
                 myref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -171,11 +171,7 @@ public class AddcatatanActivity extends AppCompatActivity {
                             finish();
                             Intent intent = new Intent(AddcatatanActivity.this, MainActivity.class);
                             startActivity(intent);
-//                            Intent intentx = new Intent(AddcatatanActivity.this, MyBroadcastReceiver.class);
-//                            PendingIntent pendingIntent = PendingIntent.getBroadcast(AddcatatanActivity.this, 234324243, intent, 0);
-//                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-//                                    + (5 * 1000), pendingIntent);
+//
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                                 CharSequence name = "remander";
                                 String desc = "Chanelku";
@@ -203,50 +199,48 @@ public class AddcatatanActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser mUser = mAuth.getCurrentUser();
-        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
-        String mEmail = sharedPreferences.getString("email","");
-
-        if(mEmail == ""){
-            inflater.inflate(R.menu.optionmenu,menu);
-        }else{
-            inflater.inflate(R.menu.optionmenu2,menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.home:
-                finish();
-                Intent intentHome = new Intent(this, MainActivity.class);
-                startActivity(intentHome);
-                return true;
-            case R.id.login:
-                finish();
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.register:
-                finish();
-                Intent intent2 = new Intent(this, RegisterActivity.class);
-                startActivity(intent2);
-                return true;
-            case R.id.logout:
-                SharedPreferences preferences = getSharedPreferences("Login",AddcatatanActivity.this.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
-                editor.apply();
-                finish();
-                Intent intent3 = new Intent(this,LoginActivity.class);
-                startActivity(intent3);
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
+//        String mEmail = sharedPreferences.getString("email","");
+//
+//        if(mEmail == ""){
+//            inflater.inflate(R.menu.optionmenu,menu);
+//        }else{
+//            inflater.inflate(R.menu.optionmenu2,menu);
+//        }
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        switch (item.getItemId()){
+//            case R.id.home:
+//                finish();
+//                Intent intentHome = new Intent(this, MainActivity.class);
+//                startActivity(intentHome);
+//                return true;
+//            case R.id.login:
+//                finish();
+//                Intent intent = new Intent(this, LoginActivity.class);
+//                startActivity(intent);
+//                return true;
+//            case R.id.register:
+//                finish();
+//                Intent intent2 = new Intent(this, RegisterActivity.class);
+//                startActivity(intent2);
+//                return true;
+//            case R.id.logout:
+//                SharedPreferences preferences = getSharedPreferences("Login",AddcatatanActivity.this.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.clear();
+//                editor.apply();
+//                finish();
+//                Intent intent3 = new Intent(this,LoginActivity.class);
+//                startActivity(intent3);
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 }

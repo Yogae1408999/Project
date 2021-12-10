@@ -22,8 +22,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"alarm")
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setAutoCancel(true)
-                .setContentTitle("Alaram nyala")
-                .setContentText("yokk").setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentTitle("Alarm nyala")
+                .setContentText("Peringatan!").setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
         MediaPlayer player = MediaPlayer.create(context, Settings.System.DEFAULT_ALARM_ALERT_URI);

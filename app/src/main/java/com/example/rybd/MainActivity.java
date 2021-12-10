@@ -29,10 +29,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.rybd.databinding.ActivityMainBinding;
 import com.example.rybd.ui.catatan.CatatanFragment;
 import com.example.rybd.ui.gallery.GalleryFragment;
+import com.example.rybd.ui.home.HomeFragment;
+import com.example.rybd.ui.login.LoginFragment;
+import com.example.rybd.ui.register.RegisterFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -46,11 +50,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements CatatanViewClick{
+public class MainActivity extends AppCompatActivity {
+//    public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ActionBarDrawerToggle toogleMenu;
     DrawerLayout drawerLayout;
 
@@ -66,35 +72,64 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.appBarMain.toolbar);
-
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
-        String mEmail = sharedPreferences.getString("username","");
-        if(mEmail == ""){
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.navView);
+        SharedPreferences sharedPreferences = getSharedPreferences("Login", MODE_PRIVATE);
+        String mEmail = sharedPreferences.getString("username", "");
+        String mEmaill = sharedPreferences.getString("email", "");
+        View headerView = navigationView.getHeaderView(0);
+        if (mEmail == "") {
             navigationView.inflateMenu(R.menu.nav_header_menu);
-        }else{
+        } else {
+            TextView header_text = headerView.findViewById(R.id.header_title);
+            TextView header_text_email = headerView.findViewById(R.id.header_title_email);
+            header_text.setText(mEmail);
+            header_text_email.setText(mEmaill);
             navigationView.inflateMenu(R.menu.nav_header_menu_2);
         }
+//        navigationView.setNavigationItemSelectedListener(this);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.menu_satu,R.id.menu_dua, R.id.menu_tiga,R.id.menu_logout)
+                R.id.menu_satu, R.id.menu_dua, R.id.menu_tiga, R.id.menu_logout, R.id.menu_catatan)
                 .setOpenableLayout(drawer)
                 .build();
-
+        FragmentManager fmx = getSupportFragmentManager();
+        FragmentTransaction ftx = fmx.beginTransaction();
+        ftx.replace(R.id.nav_host_fragment_content_main,new HomeFragment());
+        ftx.commit();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController,mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-//        FloatingActionButton addCatatans = findViewById(R.id.floatingActionButton);
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        toogleMenu = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        toogleMenu = new ActionBarDrawerToggle(this, drawer, R.string.open, R.string.close);
+
+//        binding = ActivityMainBinding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
+//
+//        setSupportActionBar(binding.appBarMain.toolbar);
+//
+//        DrawerLayout drawer = binding.drawerLayout;
+//        NavigationView navigationView = binding.navView;
+//        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
+//        String mEmail = sharedPreferences.getString("username","");
+//        if(mEmail == ""){
+//            navigationView.inflateMenu(R.menu.nav_header_menu);
+//        }else{
+//            navigationView.inflateMenu(R.menu.nav_header_menu_2);
+//        }
+//        mAppBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.menu_satu,R.id.menu_dua, R.id.menu_tiga,R.id.menu_logout)
+//                .setOpenableLayout(drawer)
+//                .build();
+//
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+//        NavigationUI.setupWithNavController(navigationView, navController);
+//        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+//        toogleMenu = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
 //        TextView textEmail = findViewById(R.id.email);
 //        FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -136,104 +171,43 @@ public class MainActivity extends AppCompatActivity implements CatatanViewClick{
 //
 //            }
 //        });
-
-    }
-
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser mUser = mAuth.getCurrentUser();
-        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
-        String mEmail = sharedPreferences.getString("email","");
-
-        if(mEmail == ""){
-            inflater.inflate(R.menu.optionmenu,menu);
-        }else{
-            inflater.inflate(R.menu.optionmenu2,menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.home:
-                finish();
-                Intent intentHome = new Intent(this, MainActivity.class);
-                startActivity(intentHome);
-                return true;
-            case R.id.login:
-                finish();
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.register:
-                finish();
-                Intent intent2 = new Intent(this, RegisterActivity.class);
-                startActivity(intent2);
-                return true;
-            case R.id.logout:
-                SharedPreferences preferences = getSharedPreferences("Login",MainActivity.this.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
-                editor.apply();
-                finish();
-                Intent intent3 = new Intent(this,LoginActivity.class);
-                startActivity(intent3);
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onItemClick(int position) {
-        Intent intentnota = new Intent(this,EditCatatan.class);
-//        data = new ArrayList<>();
-//        data.add(catatanArrayList.get(position).getId().toString());
-        intentnota.putExtra("data",catatanArrayList.get(position).getId().toString());
-        startActivity(intentnota);
-    }
-
-    @Override
-    public void onLongItemClick(int position) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myref = database.getReference("catatan");
-        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
-        String mUser = sharedPreferences.getString("username","");
-
-        myref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                snapshot.child(mUser).child(catatanArrayList.get(position).getId().toString()).getRef().removeValue();
-                Toast.makeText(MainActivity.this, "Berhasil Hapus : "+catatanArrayList.get(position).getJudul(),Toast.LENGTH_SHORT).show();
-                catatanArrayList.remove(position);
-                adapter.notifyItemRemoved(position);
-                adapter = new AdapterCatatan(catatanArrayList,MainActivity.this);
-                recyclerView = (RecyclerView) findViewById(R.id.listCatatan);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onCancelled( DatabaseError error) {
-
-            }
+        FloatingActionButton ftb = findViewById(R.id.fab);
+        ftb.setOnClickListener(view -> {
+//            FragmentManager fm = getSupportFragmentManager();
+//            FragmentTransaction ft = fm.beginTransaction();
+//            ft.replace(R.id.nav_host_fragment_content_main,new LoginFragment());
+//            ft.commit();
+            Intent intent2 = new Intent(MainActivity.this, AddcatatanActivity.class);
+            startActivity(intent2);
         });
-
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController,drawerLayout) || super.onSupportNavigateUp();
     }
 
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        Fragment fragment = null;
+//        switch (item.getItemId()) {
+//            case R.id.menu_satu:
+//                fragment = new LoginFragment();
+//                break;
+//            case R.id.menu_dua:
+//                fragment = new LoginFragment();
+//                break;
+//            case R.id.menu_tiga:
+//                fragment = new RegisterFragment();
+//                break;
+//            case R.id.menu_logout:
+//                fragment = new LogoutFragment();
+//                break;
+//        }
+//
+//        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_main, fragment).commit();
+//        return true;
+//    }
 }
