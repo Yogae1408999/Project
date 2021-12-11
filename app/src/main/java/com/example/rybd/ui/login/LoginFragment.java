@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -39,6 +41,9 @@ public class LoginFragment extends Fragment {
         binding = inflater.inflate(R.layout.activity_login, container, false);
         SharedPreferences sharedPreferences = binding.getContext().getSharedPreferences("Login",getContext().MODE_PRIVATE);
         EditText inputEmail = binding.findViewById(R.id.email);
+        ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setTitle("Login");
         EditText inputPassword = binding.findViewById(R.id.password);
         Button btnLogin = binding.findViewById(R.id.btnlogin);
         Button btnRegister = binding.findViewById(R.id.btnregister);

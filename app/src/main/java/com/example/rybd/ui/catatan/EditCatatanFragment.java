@@ -25,10 +25,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.rybd.AddcatatanActivity;
 import com.example.rybd.CatatanHelper;
+import com.example.rybd.EditCatatan;
+import com.example.rybd.LoginActivity;
 import com.example.rybd.MainActivity;
 import com.example.rybd.MyBroadcastReceiver;
 import com.example.rybd.R;
@@ -44,16 +46,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class CatatanFragment extends Fragment {
+public class EditCatatanFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View binding = inflater.inflate(R.layout.activity_addcatatan, container, false);
-
+        Bundle bundle = this.getArguments();
+        String data = String.valueOf(bundle.getInt("data"));
         ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setTitle("Tambah Catatan");
-
+        actionbar.setTitle("Edit Catatan");
         EditText isianJudul = binding.findViewById(R.id.judul);
         EditText isianIsi = binding.findViewById(R.id.isi);
         EditText isitanggal = binding.findViewById(R.id.tanggal);
@@ -63,7 +65,26 @@ public class CatatanFragment extends Fragment {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myref = database.getReference("catatan");
         DatabaseReference myrefuser = database.getReference("user");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Login",getActivity().MODE_PRIVATE);
+        String mUser = sharedPreferences.getString("username","");
+        String mEmail = sharedPreferences.getString("email","");
         Calendar calendar = Calendar.getInstance();
+        myref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (mUser.equals(snapshot.child(mUser).getKey())){
+                    isianJudul.setText(snapshot.child(mUser).child(data).child("judul").getValue(String.class));
+                    isianIsi.setText(snapshot.child(mUser).child(data).child("isian").getValue(String.class));
+                    isitanggal.setText(snapshot.child(mUser).child(data).child("tanggal").getValue(String.class));
+                    isijam.setText(snapshot.child(mUser).child(data).child("jam").getValue(String.class));
+                    isiremainder.setText(snapshot.child(mUser).child(data).child("remainder").getValue(String.class));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -126,16 +147,14 @@ public class CatatanFragment extends Fragment {
             String remainder = isiremainder.getText().toString();
 //            FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //            FirebaseUser mUser = mAuth.getCurrentUser();
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Login",getActivity().MODE_PRIVATE);
-            String mEmail = sharedPreferences.getString("username","");
-            String nama = mEmail;
+            String nama = mUser;
 
             if(mEmail == ""){
-                Toast.makeText(getContext(), "Silahkan Login", Toast.LENGTH_LONG).show();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_content_main, new LoginFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                Fragment frag = new LoginFragment();
+                ft.replace(R.id.nav_host_fragment_content_main,frag);
+                ft.commit();
             }else{
                 myref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -148,53 +167,20 @@ public class CatatanFragment extends Fragment {
                             isitanggal.setError("Tidak boleh kosong");
                         }else if(jam.length() == 0){
                             isijam.setError("Tidak boleh kosong");
-                        }else if(remainder.length() == 0){
+                        }else if(remainder.length() == 0) {
                             isiremainder.setError("Tidak boleh kosong");
-                        }else if (mEmail.equals(snapshot.child(mEmail).getKey())){
-                            Integer Jumlah = 0;
-                            for (DataSnapshot data : snapshot.child(mEmail).getChildren()){
-                                Jumlah = data.child("id").getValue(Integer.class)+1;
-                            }
+                        }else if (mUser.equals(snapshot.child(mUser).getKey())){
+                            Integer Jumlah = Integer.parseInt(data);
                             CatatanHelper catatanHelper = new CatatanHelper(Jumlah,judul,isi,tanggal,jam,remainder);
                             myref.child(nama).child(Jumlah.toString()).setValue(catatanHelper);
-                            Toast.makeText(getContext(),"berhasil menmbahkan",Toast.LENGTH_SHORT).show();
-                            Calendar date = Calendar.getInstance();
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                            try {
-                                date.setTime(format.parse(tanggal+jam));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-//                            Calendar cal = new GregorianCalendar();
-//                            cal.add(Calendar.DAY_OF_YEAR, date.YEAR);
-//                            cal.set(Calendar.HOUR_OF_DAY, date.HOUR_OF_DAY);
-//                            cal.set(Calendar.MINUTE, date.MINUTE);
-//                            cal.set(Calendar.SECOND, date.SECOND);
-//                            cal.set(Calendar.MILLISECOND, date.MILLISECOND);
-//                            cal.set(Calendar.DATE, date.DATE);
-//                            cal.set(Calendar.MONTH, date.MONTH);
-                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.nav_host_fragment_content_main, new HomeFragment());
-                            transaction.addToBackStack(null);
-                            transaction.commit();
-//
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                CharSequence name = "remander";
-                                String desc = "Chanelku";
-                                Integer importx = NotificationManager.IMPORTANCE_HIGH;
-                                NotificationChannel channel = new NotificationChannel("alarm",name,importx);
-                                channel.setDescription(desc);
-
-                                NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
-                                notificationManager.createNotificationChannel(channel);
-                            }
-                            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
-                            Intent intent1 = new Intent(getContext(), MyBroadcastReceiver.class);
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),0,intent1,0);
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (20 * 1000), pendingIntent);
+                            Toast.makeText(getContext(),"berhasil Merubah",Toast.LENGTH_SHORT).show();
+                            FragmentManager fm = getActivity().getSupportFragmentManager();
+                            FragmentTransaction ft = fm.beginTransaction();
+                            Fragment frag = new HomeFragment();
+                            ft.replace(R.id.nav_host_fragment_content_main,frag);
+                            ft.commit();
                         }
                     }
-
                     @Override
                     public void onCancelled( DatabaseError error) {
 

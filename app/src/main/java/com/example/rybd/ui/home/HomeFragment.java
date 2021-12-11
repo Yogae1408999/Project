@@ -29,6 +29,7 @@ import com.example.rybd.R;
 import com.example.rybd.databinding.ActivityMainBinding;
 import com.example.rybd.databinding.FragmentHomeBinding;
 import com.example.rybd.ui.catatan.CatatanFragment;
+import com.example.rybd.ui.catatan.EditCatatanFragment;
 import com.example.rybd.ui.login.LoginFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
@@ -104,9 +105,17 @@ public class HomeFragment extends Fragment implements CatatanViewClick {
 
     @Override
     public void onItemClick(int position) {
-        Intent intentnota = new Intent(getActivity(),EditCatatan.class);
-        intentnota.putExtra("data",catatanArrayList.get(position).getId().toString());
-        startActivity(intentnota);
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Bundle bundle = new Bundle();
+        Fragment frag = new EditCatatanFragment();
+        frag.setArguments(bundle);
+        bundle.putInt("data", Integer.parseInt(catatanArrayList.get(position).getId().toString()));
+        ft.replace(R.id.nav_host_fragment_content_main,frag);
+        ft.commit();
+//        Intent intentnota = new Intent(getActivity(),EditCatatan.class);
+//        intentnota.putExtra("data",catatanArrayList.get(position).getId().toString());
+//        startActivity(intentnota);
     }
 
     @Override

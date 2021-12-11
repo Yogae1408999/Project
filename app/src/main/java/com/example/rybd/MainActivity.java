@@ -2,8 +2,10 @@ package com.example.rybd;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,7 +31,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.rybd.databinding.ActivityMainBinding;
 import com.example.rybd.ui.catatan.CatatanFragment;
@@ -55,7 +56,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 //    public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ActionBarDrawerToggle toogleMenu;
     DrawerLayout drawerLayout;
@@ -74,14 +75,22 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.googleg_standard_color_18);
+        actionbar.setTitle("Home");
+
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.navView);
         SharedPreferences sharedPreferences = getSharedPreferences("Login", MODE_PRIVATE);
         String mEmail = sharedPreferences.getString("username", "");
         String mEmaill = sharedPreferences.getString("email", "");
         View headerView = navigationView.getHeaderView(0);
+        toolbar.setNavigationOnClickListener(view -> {
+            drawer.open();
+        });
         if (mEmail == "") {
             navigationView.inflateMenu(R.menu.nav_header_menu);
         } else {
@@ -91,18 +100,18 @@ public class MainActivity extends AppCompatActivity {
             header_text_email.setText(mEmaill);
             navigationView.inflateMenu(R.menu.nav_header_menu_2);
         }
-//        navigationView.setNavigationItemSelectedListener(this);
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.menu_satu, R.id.menu_dua, R.id.menu_tiga, R.id.menu_logout, R.id.menu_catatan)
-                .setOpenableLayout(drawer)
-                .build();
+        navigationView.setNavigationItemSelectedListener(this);
+//        mAppBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.menu_satu, R.id.menu_dua, R.id.menu_tiga, R.id.menu_logout, R.id.menu_catatan)
+//                .setOpenableLayout(drawer)
+//                .build();
         FragmentManager fmx = getSupportFragmentManager();
         FragmentTransaction ftx = fmx.beginTransaction();
         ftx.replace(R.id.nav_host_fragment_content_main,new HomeFragment());
         ftx.commit();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController,mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+//        NavController navController = Navigation.findNavController(this,R.id.nav_host_fragment_content_main);
+        //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        NavigationUI.setupActionBarWithNavController(this, navController,mAppBarConfiguration);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         toogleMenu = new ActionBarDrawerToggle(this, drawer, R.string.open, R.string.close);
 
@@ -173,15 +182,14 @@ public class MainActivity extends AppCompatActivity {
 //        });
         FloatingActionButton ftb = findViewById(R.id.fab);
         ftb.setOnClickListener(view -> {
-//            FragmentManager fm = getSupportFragmentManager();
-//            FragmentTransaction ft = fm.beginTransaction();
-//            ft.replace(R.id.nav_host_fragment_content_main,new LoginFragment());
-//            ft.commit();
-            Intent intent2 = new Intent(MainActivity.this, AddcatatanActivity.class);
-            startActivity(intent2);
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.nav_host_fragment_content_main,new CatatanFragment());
+            ft.commit();
+//            Intent intent2 = new Intent(MainActivity.this, AddcatatanActivity.class);
+//            startActivity(intent2);
         });
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -189,25 +197,25 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController,drawerLayout) || super.onSupportNavigateUp();
     }
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        Fragment fragment = null;
-//        switch (item.getItemId()) {
-//            case R.id.menu_satu:
-//                fragment = new LoginFragment();
-//                break;
-//            case R.id.menu_dua:
-//                fragment = new LoginFragment();
-//                break;
-//            case R.id.menu_tiga:
-//                fragment = new RegisterFragment();
-//                break;
-//            case R.id.menu_logout:
-//                fragment = new LogoutFragment();
-//                break;
-//        }
-//
-//        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_main, fragment).commit();
-//        return true;
-//    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+        switch (item.getItemId()) {
+            case R.id.menu_satu:
+                fragment = new HomeFragment();
+                break;
+            case R.id.menu_dua:
+                fragment = new LoginFragment();
+                break;
+            case R.id.menu_tiga:
+                fragment = new RegisterFragment();
+                break;
+            case R.id.menu_logout:
+                fragment = new LogoutFragment();
+                break;
+        }
+        drawerLayout.close();
+        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_main, fragment).commit();
+        return true;
+    }
 }
