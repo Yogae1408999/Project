@@ -3,20 +3,19 @@ package com.example.rybd.ui.catatan;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -29,24 +28,26 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.rybd.CatatanHelper;
-import com.example.rybd.EditCatatan;
-import com.example.rybd.LoginActivity;
-import com.example.rybd.MainActivity;
 import com.example.rybd.MyBroadcastReceiver;
+import com.example.rybd.MyBroadcastRemainderReceiver;
 import com.example.rybd.R;
 import com.example.rybd.ui.home.HomeFragment;
 import com.example.rybd.ui.login.LoginFragment;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class EditCatatanFragment extends Fragment {
+    long setremainder = 0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,12 +57,23 @@ public class EditCatatanFragment extends Fragment {
         ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setTitle("Edit Catatan");
-        EditText isianJudul = binding.findViewById(R.id.judul);
-        EditText isianIsi = binding.findViewById(R.id.isi);
-        EditText isitanggal = binding.findViewById(R.id.tanggal);
-        EditText isijam = binding.findViewById(R.id.jam);
-        EditText isiremainder = binding.findViewById(R.id.remainder);
+        TabLayout tab = getActivity().findViewById(R.id.tablayout);
+        tab.setVisibility(View.GONE);
+        ExtendedFloatingActionButton ftb = getActivity().findViewById(R.id.fab);
+        ftb.setVisibility(View.GONE);
+        TextInputLayout vJudul = binding.findViewById(R.id.input_judul);
+        TextInputLayout vIsi = binding.findViewById(R.id.input_desc);
+        TextInputLayout vtanggal = binding.findViewById(R.id.input_tanggal);
+        TextInputLayout vjam = binding.findViewById(R.id.input_time);
+        TextInputLayout vremainder = binding.findViewById(R.id.input_remainder);
+
+        TextInputEditText isianJudul = binding.findViewById(R.id.edit_judul);
+        TextInputEditText isianIsi = binding.findViewById(R.id.edit_desc);
+        TextInputEditText isitanggal = binding.findViewById(R.id.edit_tanggal);
+        TextInputEditText isijam = binding.findViewById(R.id.edit_time);
+        TextInputEditText isiremainder = binding.findViewById(R.id.edit_remainder);
         Button btnSimpan = binding.findViewById(R.id.simpan);
+        btnSimpan.setText("Simpan");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myref = database.getReference("catatan");
         DatabaseReference myrefuser = database.getReference("user");
@@ -69,6 +81,7 @@ public class EditCatatanFragment extends Fragment {
         String mUser = sharedPreferences.getString("username","");
         String mEmail = sharedPreferences.getString("email","");
         Calendar calendar = Calendar.getInstance();
+
         myref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -110,6 +123,8 @@ public class EditCatatanFragment extends Fragment {
                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                     calendar.set(Calendar.HOUR_OF_DAY,selectedHour);
                     calendar.set(Calendar.MINUTE,selectedMinute);
+                    calendar.set(Calendar.MILLISECOND,0);
+                    calendar.set(Calendar.SECOND,0);
                     String format = "HH:mm";
                     SimpleDateFormat sdf = new SimpleDateFormat(format);
                     isijam.setText(sdf.format(calendar.getTime()));
@@ -125,6 +140,21 @@ public class EditCatatanFragment extends Fragment {
             mBuil.setSingleChoiceItems(listitem, -1, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    if (i == 0){
+                        setremainder = 0;
+                    }else if(i == 1){
+                        setremainder = 300000;
+                    }else if(i == 2){
+                        setremainder = 600000;
+                    }else if(i == 3){
+                        setremainder = 1800000;
+                    }else if(i == 4){
+                        setremainder = 3600000;
+                    }else if(i == 5){
+                        setremainder = 7200000;
+                    }else if(i == 6){
+                        setremainder = 10800000;
+                    }
                     isiremainder.setText(listitem[i]);
                     dialogInterface.dismiss();
                 }
@@ -145,6 +175,8 @@ public class EditCatatanFragment extends Fragment {
             String tanggal = isitanggal.getText().toString();
             String jam = isijam.getText().toString();
             String remainder = isiremainder.getText().toString();
+            Integer aktif = 1;
+
 //            FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //            FirebaseUser mUser = mAuth.getCurrentUser();
             String nama = mUser;
@@ -160,25 +192,52 @@ public class EditCatatanFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         if (judul.length() == 0) {
-                            isianJudul.setError("Tidak boleh kosong");
+                            vJudul.setError("Tidak boleh kosong");
                         }else if(isi.length() == 0){
-                            isianIsi.setError("Tidak boleh kosong");
+                            vIsi.setError("Tidak boleh kosong");
                         }else if(tanggal.length() == 0){
-                            isitanggal.setError("Tidak boleh kosong");
+                            vtanggal.setError("Tidak boleh kosong");
                         }else if(jam.length() == 0){
-                            isijam.setError("Tidak boleh kosong");
+                            vjam.setError("Tidak boleh kosong");
                         }else if(remainder.length() == 0) {
-                            isiremainder.setError("Tidak boleh kosong");
+                            vremainder.setError("Tidak boleh kosong");
                         }else if (mUser.equals(snapshot.child(mUser).getKey())){
                             Integer Jumlah = Integer.parseInt(data);
-                            CatatanHelper catatanHelper = new CatatanHelper(Jumlah,judul,isi,tanggal,jam,remainder);
+                            CatatanHelper catatanHelper = new CatatanHelper(Jumlah,judul,isi,tanggal,jam,remainder,aktif);
                             myref.child(nama).child(Jumlah.toString()).setValue(catatanHelper);
                             Toast.makeText(getContext(),"berhasil Merubah",Toast.LENGTH_SHORT).show();
                             FragmentManager fm = getActivity().getSupportFragmentManager();
                             FragmentTransaction ft = fm.beginTransaction();
+                            Bundle bundle = new Bundle();
                             Fragment frag = new HomeFragment();
+                            bundle.putInt("status",1);
+                            frag.setArguments(bundle);
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.nav_host_fragment_content_main, frag);
                             ft.replace(R.id.nav_host_fragment_content_main,frag);
                             ft.commit();
+                            TabLayout tab = getActivity().findViewById(R.id.tablayout);
+                            tab.selectTab(tab.getTabAt(0));
+                            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
+                            Intent intent1 = new Intent(getContext(), MyBroadcastReceiver.class);
+                            if(setremainder>0){
+                                Intent setIntenttRemainder = new Intent(getContext(), MyBroadcastRemainderReceiver.class);
+                                setIntenttRemainder.putExtra("judul",judul);
+                                setIntenttRemainder.putExtra("jumlah",Jumlah);
+                                setIntenttRemainder.putExtra("waktu",remainder);
+                                PendingIntent pendingIntenttRemainder = PendingIntent.getBroadcast(getContext(),Jumlah,setIntenttRemainder,0);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis()-setremainder, pendingIntenttRemainder);
+                                }
+                            }
+                            intent1.putExtra("judul",judul);
+                            intent1.putExtra("jumlah",Jumlah);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),Jumlah,intent1,0);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                            }
+                            Log.i("sekarang", String.valueOf(System.currentTimeMillis()));
+                            Log.i("custom", String.valueOf(calendar.getTimeInMillis()));
                         }
                     }
                     @Override

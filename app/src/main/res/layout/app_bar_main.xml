@@ -9,26 +9,32 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.IniCoba.AppBarOverlay">
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        app:expanded="true"
+        >
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.IniCoba.PopupOverlay" />
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:layout_height="?attr/actionBarSize"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:text="Tambah"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:textColor="@color/white"
+        android:backgroundTint="@color/design_default_color_primary"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="@color/white"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

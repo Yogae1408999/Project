@@ -1,38 +1,30 @@
 package com.example.rybd.ui.home;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rybd.AdapterCatatan;
 import com.example.rybd.CatatanHelper;
 import com.example.rybd.CatatanViewClick;
-import com.example.rybd.EditCatatan;
-import com.example.rybd.MainActivity;
 import com.example.rybd.R;
-import com.example.rybd.databinding.ActivityMainBinding;
 import com.example.rybd.databinding.FragmentHomeBinding;
-import com.example.rybd.ui.catatan.CatatanFragment;
 import com.example.rybd.ui.catatan.EditCatatanFragment;
-import com.example.rybd.ui.login.LoginFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.FirebaseApp;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,34 +41,40 @@ public class HomeFragment extends Fragment implements CatatanViewClick {
     private RecyclerView recyclerView;
     private AdapterCatatan adapter;
     public ArrayList<CatatanHelper> catatanArrayList;
+    Integer status;
     ArrayList<String> data;
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        //        final TextView textView = binding.textHome;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
+        ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setTitle("Home");
 
+        TabLayout tab = getActivity().findViewById(R.id.tablayout);
+        tab.setVisibility(View.VISIBLE);
+        ExtendedFloatingActionButton ftb = getActivity().findViewById(R.id.fab);
+        ftb.setVisibility(View.VISIBLE);
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
-        TextView textEmail = this.getActivity().findViewById(R.id.email);
         String mUser = sharedPreferences.getString("username","");
-        String mEmail = sharedPreferences.getString("email","");
         catatanArrayList = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myref = database.getReference("catatan");
+        Bundle bdl = this.getArguments();
+
         myref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                if (bdl != null) {
+                    status = bdl.getInt("status");
+                }
                 catatanArrayList.clear();
                 if (mUser.equals(snapshot.child(mUser).getKey())){
                     for (DataSnapshot data : snapshot.child(mUser).getChildren()){
-                        catatanArrayList.add(new CatatanHelper(data.child("id").getValue(Integer.class),data.child("judul").getValue(String.class), data.child("isian").getValue(String.class),data.child("tanggal").getValue(String.class),data.child("jam").getValue(String.class),data.child("remainder").getValue(String.class)));
+                        if (data.child("aktif").getValue(Integer.class) == status){
+                            catatanArrayList.add(new CatatanHelper(data.child("id").getValue(Integer.class),data.child("judul").getValue(String.class), data.child("isian").getValue(String.class),data.child("tanggal").getValue(String.class),data.child("jam").getValue(String.class),data.child("remainder").getValue(String.class),data.child("aktif").getValue(Integer.class)));
+                        }
                     }
                 }
                 Collections.reverse(catatanArrayList);

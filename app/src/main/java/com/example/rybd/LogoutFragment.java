@@ -19,7 +19,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.rybd.ui.gallery.GalleryFragment;
 import com.example.rybd.ui.home.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -27,7 +26,7 @@ public class LogoutFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View binding = inflater.inflate(R.layout.activity_main, container, false);
+        View binding = inflater.inflate(R.layout.content_main, container, false);
         Intent intent2 = new Intent(getContext(), MainActivity.class);
         startActivity(intent2);
         getActivity().finish();

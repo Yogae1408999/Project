@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rybd">
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
@@ -11,18 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RYBD">
         <activity
-            android:name=".AddcatatanActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditCatatan"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -32,6 +21,8 @@
             </intent-filter>
         </activity>
         <receiver android:name="MyBroadcastReceiver" >
+        </receiver>
+        <receiver android:name=".MyBroadcastRemainderReceiver" >
         </receiver>
     </application>
 

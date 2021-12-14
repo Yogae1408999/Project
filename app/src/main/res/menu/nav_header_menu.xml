@@ -2,14 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_satu"
+        android:icon="@drawable/outline_home_24"
+        android:checkable="true"
+        android:checked="true"
         android:title="Home" />
 
     <item
         android:id="@+id/menu_dua"
+        android:icon="@drawable/outline_login_24"
         android:title="Login" />
 
     <item
         android:id="@+id/menu_tiga"
+        android:icon="@drawable/outline_person_24"
         android:title="Register" />
+    <item
+        android:id="@+id/menu_about"
+        android:icon="@drawable/outline_info_24"
+        android:title="About" />
 
 </menu>

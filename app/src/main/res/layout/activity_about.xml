@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/gambar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="0dp"
+        android:src="@mipmap/icon" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/gambar"
+        android:textSize="23dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:text="RYBD Note" />
+
+    <TextView
+        android:id="@+id/versi"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/textView2"
+        android:textSize="23dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:text="versi" />
+
+    <TextView
+        android:id="@+id/develop"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/versi"
+        android:textSize="23dp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:text="Development by :" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/develop">
+
+        <TextView
+            android:id="@+id/me1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="me1"
+            android:textSize="20dp" />
+        <TextView
+            android:id="@+id/me2"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="me2"
+            android:textSize="20dp" />
+        <TextView
+            android:id="@+id/me3"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="me3"
+            android:textSize="20dp" />
+        <TextView
+            android:id="@+id/me4"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="me4"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

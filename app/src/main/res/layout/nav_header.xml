@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="180dp"
     android:orientation="vertical"
-    android:background="@color/colorPrimary">
+    android:background="@mipmap/background">
     <TextView
         android:id="@+id/header_title"
         android:layout_width="wrap_content"
@@ -11,8 +11,10 @@
         android:layout_marginTop="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:textSize="24dp"
+        android:textColor="@color/white"
         android:textAppearance="?attr/textAppearanceHeadline6"
-        android:text="@string/header_title" />
+        android:text="Username" />
 
     <TextView
         android:id="@+id/header_title_email"
@@ -20,6 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:textSize="17dp"
+        android:textColor="@color/white"
         android:layout_marginEnd="24dp"
-        android:text="@string/header_title" />
+        android:text="Email" />
 </LinearLayout>

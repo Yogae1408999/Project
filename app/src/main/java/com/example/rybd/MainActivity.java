@@ -33,14 +33,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rybd.databinding.ActivityMainBinding;
+import com.example.rybd.ui.about.AboutFragment;
 import com.example.rybd.ui.catatan.CatatanFragment;
-import com.example.rybd.ui.gallery.GalleryFragment;
 import com.example.rybd.ui.home.HomeFragment;
 import com.example.rybd.ui.login.LoginFragment;
 import com.example.rybd.ui.register.RegisterFragment;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -57,7 +59,6 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-//    public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ActionBarDrawerToggle toogleMenu;
     DrawerLayout drawerLayout;
 
@@ -75,11 +76,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.googleg_standard_color_18);
+        actionbar.setHomeAsUpIndicator(R.drawable.outline_menu_24);
         actionbar.setTitle("Home");
 
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
@@ -101,108 +102,82 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.inflateMenu(R.menu.nav_header_menu_2);
         }
         navigationView.setNavigationItemSelectedListener(this);
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.menu_satu, R.id.menu_dua, R.id.menu_tiga, R.id.menu_logout, R.id.menu_catatan)
-//                .setOpenableLayout(drawer)
-//                .build();
+
+        Bundle bundle = new Bundle();
+        Fragment frag5 = new HomeFragment();
+        bundle.putInt("status",1);
+        frag5.setArguments(bundle);
         FragmentManager fmx = getSupportFragmentManager();
         FragmentTransaction ftx = fmx.beginTransaction();
-        ftx.replace(R.id.nav_host_fragment_content_main,new HomeFragment());
+        ftx.replace(R.id.nav_host_fragment_content_main,frag5);
         ftx.commit();
-//        NavController navController = Navigation.findNavController(this,R.id.nav_host_fragment_content_main);
-        //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        NavigationUI.setupActionBarWithNavController(this, navController,mAppBarConfiguration);
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         toogleMenu = new ActionBarDrawerToggle(this, drawer, R.string.open, R.string.close);
-
-//        binding = ActivityMainBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
-//
-//        setSupportActionBar(binding.appBarMain.toolbar);
-//
-//        DrawerLayout drawer = binding.drawerLayout;
-//        NavigationView navigationView = binding.navView;
-//        SharedPreferences sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
-//        String mEmail = sharedPreferences.getString("username","");
-//        if(mEmail == ""){
-//            navigationView.inflateMenu(R.menu.nav_header_menu);
-//        }else{
-//            navigationView.inflateMenu(R.menu.nav_header_menu_2);
-//        }
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.menu_satu,R.id.menu_dua, R.id.menu_tiga,R.id.menu_logout)
-//                .setOpenableLayout(drawer)
-//                .build();
-//
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-//        NavigationUI.setupWithNavController(navigationView, navController);
-//        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-//        toogleMenu = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-
-//        TextView textEmail = findViewById(R.id.email);
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser mUser = mAuth.getCurrentUser();
-//        String mUser = sharedPreferences.getString("username","");
-//        String mEmail = sharedPreferences.getString("email","");
-//        catatanArrayList = new ArrayList<>();
-
-//        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
-//        toolbar.setOnMenuItemClickListener(menu);
-
-//        if(mEmail == ""){
-//            textEmail.setText("Belum Login");
-//        }else{
-//            textEmail.setText(mEmail);
-//        }
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myref = database.getReference("catatan");
-//        myref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                catatanArrayList.clear();
-//                if (mUser.equals(snapshot.child(mUser).getKey())){
-//                    for (DataSnapshot data : snapshot.child(mUser).getChildren()){
-//                        catatanArrayList.add(new CatatanHelper(data.child("id").getValue(Integer.class),data.child("judul").getValue(String.class), data.child("isian").getValue(String.class),data.child("tanggal").getValue(String.class),data.child("jam").getValue(String.class),data.child("remainder").getValue(String.class)));
-//                    }
-//                }
-//                Collections.reverse(catatanArrayList);
-//
-//                adapter = new AdapterCatatan(catatanArrayList,MainActivity.this);
-//                recyclerView = (RecyclerView) findViewById(R.id.listCatatan);
-//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-//                recyclerView.setLayoutManager(layoutManager);
-//                recyclerView.setAdapter(adapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//
-//            }
-//        });
-        FloatingActionButton ftb = findViewById(R.id.fab);
+        ExtendedFloatingActionButton ftb = findViewById(R.id.fab);
         ftb.setOnClickListener(view -> {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.nav_host_fragment_content_main,new CatatanFragment());
             ft.commit();
-//            Intent intent2 = new Intent(MainActivity.this, AddcatatanActivity.class);
-//            startActivity(intent2);
+
         });
+        TabLayout tab = findViewById(R.id.tablayout);
+        tab.selectTab(tab.getTabAt(0));
+
+        tab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()){
+                    case 0:
+                        Fragment frag = new HomeFragment();
+                        FragmentManager fm = getSupportFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        bundle.putInt("status",1);
+                        ft.replace(R.id.nav_host_fragment_content_main,frag);
+                        frag.setArguments(bundle);
+                        ft.commit();
+                        return;
+                    case 1:
+                        Fragment frag1 = new HomeFragment();
+                        FragmentManager fm1 = getSupportFragmentManager();
+                        FragmentTransaction ft1 = fm1.beginTransaction();
+                        bundle.putInt("status",0);
+                        ft1.replace(R.id.nav_host_fragment_content_main,frag1);
+                        frag1.setArguments(bundle);
+                        ft1.commit();
+                        return;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController,drawerLayout) || super.onSupportNavigateUp();
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        return NavigationUI.navigateUp(navController,drawerLayout) || super.onSupportNavigateUp();
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.menu_satu:
+                Bundle bundle = new Bundle();
                 fragment = new HomeFragment();
+                bundle.putInt("status",1);
+                fragment.setArguments(bundle);
                 break;
             case R.id.menu_dua:
                 fragment = new LoginFragment();
@@ -213,7 +188,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_logout:
                 fragment = new LogoutFragment();
                 break;
+            case R.id.menu_about:
+                fragment = new AboutFragment();
+                break;
         }
+        if (item.isCheckable()){
+            item.setCheckable(false);
+        }
+        item.setCheckable(true);
+        TabLayout tab = findViewById(R.id.tablayout);
+        tab.selectTab(tab.getTabAt(0));
         drawerLayout.close();
         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_main, fragment).commit();
         return true;

@@ -4,59 +4,178 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddcatatanActivity">
-
-    <EditText
-        android:id="@+id/judul"
+    android:gravity="center"
+    tools:context=".ui.catatan.CatatanFragment">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_judul"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Judul Catatan" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        app:endIconMode="custom"
+        app:startIconDrawable="@drawable/outline_title_24"
+        android:hint="Judul Catatan">
 
-    <EditText
-        android:id="@+id/isi"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/judul"
-        android:ems="10"
-        android:hint="isi"
-        android:inputType="textPersonName" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_judul"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/tanggal"
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_desc"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/isi"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="1999/12/30" />
+        android:layout_below="@+id/input_judul"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="32dp"
+        app:endIconMode="custom"
+        app:startIconDrawable="@drawable/outline_description"
+        android:hint="Deskripsi">
 
-    <EditText
-        android:id="@+id/jam"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_tanggal"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tanggal"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="23:59" />
-    <EditText
-        android:id="@+id/remainder"
+        android:layout_below="@+id/input_desc"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="32dp"
+        app:endIconMode="custom"
+        app:startIconDrawable="@drawable/outline_date_range_24"
+        android:hint="Tanggal">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_tanggal"
+            android:layout_width="match_parent"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_time"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/jam"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="Remainder" />
+        android:layout_below="@+id/input_tanggal"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="32dp"
+        app:endIconMode="custom"
+        app:startIconDrawable="@drawable/outline_alarm_24"
+        android:hint="Jam">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_time"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_remainder"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/input_time"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="32dp"
+        app:endIconMode="custom"
+        app:startIconDrawable="@drawable/outline_schedule_24"
+        android:hint="Remainder">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_remainder"
+            android:layout_width="match_parent"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/simpan"
-        android:text="Simpan"
-        android:layout_below="@+id/remainder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        style="@style/Widget.Material3.Button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/input_remainder"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="107dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="107dp"
+        android:textSize="18dp"
+        android:text="Tambah" />
+<!--    <EditText-->
+<!--        android:id="@+id/judul"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Judul Catatan" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/isi"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:layout_below="@+id/judul"-->
+<!--        android:ems="10"-->
+<!--        android:hint="isi"-->
+<!--        android:inputType="textPersonName" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/tanggal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/isi"-->
+<!--        android:clickable="false"-->
+<!--        android:cursorVisible="false"-->
+<!--        android:focusable="false"-->
+<!--        android:focusableInTouchMode="false"-->
+<!--        android:hint="1999/12/30" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/jam"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/tanggal"-->
+<!--        android:clickable="false"-->
+<!--        android:cursorVisible="false"-->
+<!--        android:focusable="false"-->
+<!--        android:focusableInTouchMode="false"-->
+<!--        android:hint="23:59" />-->
+<!--    <EditText-->
+<!--        android:id="@+id/remainder"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/jam"-->
+<!--        android:clickable="false"-->
+<!--        android:cursorVisible="false"-->
+<!--        android:focusable="false"-->
+<!--        android:focusableInTouchMode="false"-->
+<!--        android:hint="Remainder" />-->
+<!--    <Button-->
+<!--        android:id="@+id/simpan"-->
+<!--        android:text="Simpan"-->
+<!--        android:layout_below="@+id/remainder"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"/>-->
 
 </RelativeLayout>

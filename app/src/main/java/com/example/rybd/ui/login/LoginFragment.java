@@ -7,26 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.rybd.LoginActivity;
 import com.example.rybd.MainActivity;
 import com.example.rybd.R;
-import com.example.rybd.RegisterActivity;
-import com.example.rybd.databinding.FragmentGalleryBinding;
-import com.example.rybd.ui.home.HomeFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,11 +33,18 @@ public class LoginFragment extends Fragment {
 
         binding = inflater.inflate(R.layout.activity_login, container, false);
         SharedPreferences sharedPreferences = binding.getContext().getSharedPreferences("Login",getContext().MODE_PRIVATE);
-        EditText inputEmail = binding.findViewById(R.id.email);
+
         ActionBar actionbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setTitle("Login");
-        EditText inputPassword = binding.findViewById(R.id.password);
+        TabLayout tab = getActivity().findViewById(R.id.tablayout);
+        tab.setVisibility(View.GONE);
+        ExtendedFloatingActionButton ftb = getActivity().findViewById(R.id.fab);
+        ftb.setVisibility(View.GONE);
+        TextInputLayout vEmail = binding.findViewById(R.id.input_email);
+        TextInputLayout vpassword = binding.findViewById(R.id.input_password);
+        TextInputEditText inputEmail = binding.findViewById(R.id.edit_user);
+        TextInputEditText inputPassword = binding.findViewById(R.id.edit_password);
         Button btnLogin = binding.findViewById(R.id.btnlogin);
         Button btnRegister = binding.findViewById(R.id.btnregister);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -62,6 +62,8 @@ public class LoginFragment extends Fragment {
                             String getEmail = user.child("email").getValue(String.class);
 
                             if (password.equals(getPassword)) {
+                                vEmail.setError("");
+                                vpassword.setError("");
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("username",username);
                                 editor.putString("email",getEmail);
@@ -71,11 +73,12 @@ public class LoginFragment extends Fragment {
                                 getActivity().finish();
                                 Toast.makeText(getContext(), "Berhasil Login", Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getContext(), "Password salah", Toast.LENGTH_LONG).show();
+                                vEmail.setError("");
+                                vpassword.setError("Password salah");
                             }
                         }
                     }else{
-                        Toast.makeText(getContext(), "Username tidak ditemukan", Toast.LENGTH_LONG).show();
+                        vEmail.setError("Username tidak ditemukan");
                     }
                 }
 
