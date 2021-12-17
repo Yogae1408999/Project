@@ -3,6 +3,8 @@ package com.example.rybd.ui.catatan;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -196,6 +198,16 @@ public class CatatanFragment extends Fragment {
                             TabLayout tab = getActivity().findViewById(R.id.tablayout);
                             tab.selectTab(tab.getTabAt(0));
                             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                CharSequence name = "remander";
+                                String desc = "RYBD";
+                                Integer importx = NotificationManager.IMPORTANCE_HIGH;
+                                NotificationChannel channel = new NotificationChannel("alarm",name,importx);
+                                channel.setDescription(desc);
+
+                                NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+                                notificationManager.createNotificationChannel(channel);
+                            }
                             if(setremainder>0){
                                 Intent setIntenttRemainder = new Intent(getContext(), MyBroadcastRemainderReceiver.class);
                                 setIntenttRemainder.putExtra("judul",judul);

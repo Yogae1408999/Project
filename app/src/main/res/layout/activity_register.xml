@@ -96,8 +96,8 @@
         android:layout_marginStart="107dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="107dp"
-        android:textSize="18dp"
-        android:text="Register" />
+        android:text="Register"
+        android:textSize="18dp" />
 <!--    <EditText-->
 <!--        android:id="@+id/nama"-->
 <!--        android:layout_width="300dp"-->
