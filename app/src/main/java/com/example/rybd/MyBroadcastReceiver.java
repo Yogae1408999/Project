@@ -30,16 +30,19 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         DatabaseReference myref = database.getReference("catatan");
         SharedPreferences sharedPreferences = context.getSharedPreferences("Login",context.MODE_PRIVATE);
         String mEmail = sharedPreferences.getString("username","");
-
+        Intent intent1 = new Intent(context,MainActivity.class);
+        intent1.putExtra("open","true");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivities(context,jumlah, new Intent[]{intent},0);
+        PendingIntent pendingIntent1 = PendingIntent.getActivities(context,1, new Intent[]{intent1},PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"alarm")
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.mipmap.icon)
                 .setAutoCancel(true)
                 .setContentTitle("Peringatan!")
                 .setContentText(judul).setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .addAction(R.mipmap.icon,"open",pendingIntent1);
         MediaPlayer player = MediaPlayer.create(context, Settings.System.DEFAULT_ALARM_ALERT_URI);
         player.start();
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);

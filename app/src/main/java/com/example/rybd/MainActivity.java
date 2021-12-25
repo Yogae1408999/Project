@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ftb.setOnClickListener(view -> {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
+            ft.addToBackStack(null);
             ft.replace(R.id.nav_host_fragment_content_main,new CatatanFragment());
             ft.commit();
 
